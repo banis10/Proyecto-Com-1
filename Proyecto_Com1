@@ -1,3 +1,7 @@
+#201602641 Diego Andhres Fernando Barillas Gonzalez
+#201602816 Juan Carlos Solloy Xicón
+#201700464 Jorge Rafael Ramírez Barrera
+
 import cv2
 import numpy as np
 import RPi.GPIO as GPIO
