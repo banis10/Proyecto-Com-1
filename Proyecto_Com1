@@ -73,6 +73,7 @@ while True:
     if ret == False: break
     dibujando_puntos(puntos)
     if len(puntos) == 4:
+        puntos1 = []
         uniendo4puntos(puntos)
         pts1 = np.float32([puntos])
         pts2 = np.float32([[0,0], [500,0], [0,500], [500,500]])
@@ -94,8 +95,9 @@ while True:
         grises = cv2.cvtColor(dst, cv2.COLOR_BGR2GRAY)
        # cv2.imshow("gris", grises)
         _,th =  cv2.threshold(grises, 120, 255, cv2.THRESH_BINARY_INV)
-        cnts,_ = cv2.findContours(th, cv2.RETR_EXTERNAL,
-                      cv2.CHAIN_APPROX_SIMPLE)
+        cnts = cv2.findContours(th, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[0]
+        cnt1 = sorted(cnts, key=cv2.contourArea, reverse=True)
+        
         conteo = 0
         a = 0
         cv2.imshow('area',th)
@@ -109,7 +111,62 @@ while True:
                 y = int(M["m01"]/M["m00"])
                 x, y, w, h = cv2.boundingRect(cnt)
                 cv2.rectangle(dst, (x,y), (x+w, y+h),(0,255,0), 2)
-#                 puntos.append([x, y, w, h])
+                puntos1.append([x, y, w, h])
+                
+                if len(puntos1) > 2:
+                    x1, y1, w1, h1 = puntos1[0]
+                    x2, y2, w2, h2 = puntos1[1]
+                    if x1 < x2:
+                        distancia_pixeles = abs(x2 - (x1+w1)) 
+                        distancia_cm = (distancia_pixeles*29.7)/720
+                        cv2.putText(dst, "{:.2f} cm".format(distancia_cm), (x1+w1+distancia_pixeles//2, y1-30), 2, 0.8, (0,0,255), 1, cv2.LINE_AA)
+                        cv2.line(dst,(x1+w1,y1-20),(x2, y1-20),(0, 0, 255),2)
+                        cv2.line(dst,(x1+w1,y1-30),(x1+w1, y1-10),(0, 0, 255),2)
+                        cv2.line(dst,(x2,y1-30),(x2, y1-10),(0, 0, 255),2)
+                    else:
+                        distancia_pixeles = abs(x1 - (x2+w2))
+                        distancia_cm = (distancia_pixeles*29.7)/720
+                        cv2.putText(dst, "{:.2f} cm".format(distancia_cm), (x2+w2+distancia_pixeles//2, y2-30), 2, 0.8, (0,0,255), 1, cv2.LINE_AA)
+                        cv2.line(dst,(x2+w2,y2-20),(x1, y2-20),(0, 0, 255),2)
+                        cv2.line(dst,(x2+w2,y2-30),(x2+w2, y2-10),(0, 0, 255),2)
+                        cv2.line(dst,(x1,y2-30),(x1, y2-10),(0, 0, 255),2)
+            
+                if len(puntos1) > 4:
+                    x3, y3, w3, h3 = puntos1[2]
+                    x4, y4, w4, h4 = puntos1[3]
+                    if x3 < x4:
+                        distancia_pixeles = abs(x4 - (x3+w3)) 
+                        distancia_cm = (distancia_pixeles*29.7)/720
+                        cv2.putText(dst, "{:.2f} cm".format(distancia_cm), (x3+w3+distancia_pixeles//2, y3-30), 2, 0.8, (0,0,255), 1, cv2.LINE_AA)
+                        cv2.line(dst,(x3+w3,y3-20),(x3, y3-20),(0, 0, 255),2)
+                        cv2.line(dst,(x3+w3,y3-30),(x3+w3, y3-10),(0, 0, 255),2)
+                        cv2.line(dst,(x4,y3-30),(x4, y3-10),(0, 0, 255),2)
+                    else:
+                        distancia_pixeles = abs(x3 - (x4+w4))
+                        distancia_cm = (distancia_pixeles*29.7)/720
+                        cv2.putText(dst, "{:.2f} cm".format(distancia_cm), (x4+w4+distancia_pixeles//2, y4-30), 2, 0.8, (0,0,255), 1, cv2.LINE_AA)
+                        cv2.line(dst,(x4+w4,y4-20),(x3, y4-20),(0, 0, 255),2)
+                        cv2.line(dst,(x4+w4,y4-30),(x4+w4, y4-10),(0, 0, 255),2)
+                        cv2.line(dst,(x3,y4-30),(x3, y4-10),(0, 0, 255),2)
+                        
+                if len(puntos1) > 6:
+                    x5, y5, w5, h5 = puntos1[4]
+                    x6, y6, w6, h6 = puntos1[5]
+                    if x5 < x6:
+                        distancia_pixeles = abs(x6 - (x5+w5)) 
+                        distancia_cm = (distancia_pixeles*29.7)/720
+                        cv2.putText(dst, "{:.2f} cm".format(distancia_cm), (x5+w5+distancia_pixeles//2, y5-30), 2, 0.8, (0,0,255), 1, cv2.LINE_AA)
+                        cv2.line(dst,(x5+w5,y5-20),(x5, y5-20),(0, 0, 255),2)
+                        cv2.line(dst,(x5+w5,y5-30),(x5+w5, y5-10),(0, 0, 255),2)
+                        cv2.line(dst,(x6,y5-30),(x6, y5-10),(0, 0, 255),2)
+                    else:
+                        distancia_pixeles = abs(x5 - (x6+w6))
+                        distancia_cm = (distancia_pixeles*29.7)/720
+                        cv2.putText(dst, "{:.2f} cm".format(distancia_cm), (x6+w6+distancia_pixeles//2, y6-30), 2, 0.8, (0,0,255), 1, cv2.LINE_AA)
+                        cv2.line(dst,(x6+w6,y6-20),(x5, y6-20),(0, 0, 255),2)
+                        cv2.line(dst,(x6+w6,y6-30),(x6+w6, y6-10),(0, 0, 255),2)
+                        cv2.line(dst,(x5,y6-30),(x5, y6-10),(0, 0, 255),2)
+                        
                # cv2.drawContours(dst, [cnt], 0, color, 2)
                 conteo += 1
                 cv2.putText(dst, str(conteo), (x-10,y+10), 1, 2,(255,0,0),2)
