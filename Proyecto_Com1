@@ -197,7 +197,7 @@ while True:
             a = 1
         cv2.imshow("rectangulos", dst)
 
-    cv2.imshow("frame", frame)
+    #cv2.imshow("frame", frame)
     if a == 1:
 #             Audio maximo personas
         pygame.mixer.init()
