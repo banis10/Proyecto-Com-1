@@ -89,7 +89,7 @@ while True:
 #         gray = cv2.cvtColor(dst, cv2.COLOR_BGR2GRAY)
 
         # Dibujamos un rectángulo en frame
-        cv2.rectangle(dst,(0,0),(dst.shape[1],40),(0,0,0),-1)
+#         cv2.rectangle(dst,(0,0),(dst.shape[1],40),(0,0,0),-1)
         color = (0, 255, 0)
         color1 = (255,0,0) 
 #          Especificamos los puntos extremos del área a analizar
@@ -100,9 +100,9 @@ while True:
         #cv2.imshow("grsis", image)
         grises = cv2.cvtColor(dst, cv2.COLOR_BGR2GRAY)
        # cv2.imshow("gris", grises)
-        _,th =  cv2.threshold(grises, 120, 255, cv2.THRESH_BINARY_INV)
+        _,th =  cv2.threshold(grises, 100, 255, cv2.THRESH_BINARY_INV)
         cnts = cv2.findContours(th, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[0]
-        cnt1 = sorted(cnts, key=cv2.contourArea, reverse=True)
+#         cnt1 = sorted(cnts, key=cv2.contourArea, reverse=True)
         
         conteo = 0
         a = 0
@@ -119,12 +119,22 @@ while True:
                 cv2.rectangle(dst, (x,y), (x+w, y+h),(0,255,0), 2)
                 puntos1.append([x, y, w, h])
                 
-                if len(puntos1) > 2:
+                if len(puntos1) == 2:
                     x1, y1, w1, h1 = puntos1[0]
                     x2, y2, w2, h2 = puntos1[1]
                     if x1 < x2:
                         distancia_pixeles = abs(x2 - (x1+w1)) 
                         distancia_cm = (distancia_pixeles*29.7)/720
+#                         if distancia_cm < 2:
+#                 #         Audio distancia minima
+#                             GPIO.output(2,GPIO.LOW)
+#                             GPIO.output(3,GPIO.LOW)
+#                             GPIO.output(4,GPIO.HIGH)
+#                             pygame.mixer.init()
+#                             pygame.mixer.music.load("distancia.wav")
+#                             pygame.mixer.music.play()
+#                             while pygame.mixer.music.get_busy() == True:
+#                                     continue
                         cv2.putText(dst, "{:.2f} cm".format(distancia_cm), (x1+w1+distancia_pixeles//2, y1-30), 2, 0.8, (0,0,255), 1, cv2.LINE_AA)
                         cv2.line(dst,(x1+w1,y1-20),(x2, y1-20),(0, 0, 255),2)
                         cv2.line(dst,(x1+w1,y1-30),(x1+w1, y1-10),(0, 0, 255),2)
@@ -137,12 +147,23 @@ while True:
                         cv2.line(dst,(x2+w2,y2-30),(x2+w2, y2-10),(0, 0, 255),2)
                         cv2.line(dst,(x1,y2-30),(x1, y2-10),(0, 0, 255),2)
             
-                if len(puntos1) > 4:
+                if len(puntos1) == 4:
                     x3, y3, w3, h3 = puntos1[2]
                     x4, y4, w4, h4 = puntos1[3]
                     if x3 < x4:
                         distancia_pixeles = abs(x4 - (x3+w3)) 
                         distancia_cm = (distancia_pixeles*29.7)/720
+#                         if distancia_cm < 2:
+#                 #         Audio distancia minima
+#                             GPIO.output(2,GPIO.LOW)
+#                             GPIO.output(3,GPIO.LOW)
+#                             GPIO.output(4,GPIO.HIGH)
+#                             pygame.mixer.init()
+#                             pygame.mixer.music.load("distancia.wav")
+#                             pygame.mixer.music.play()
+#                             while pygame.mixer.music.get_busy() == True:
+#                                     continue
+                        
                         cv2.putText(dst, "{:.2f} cm".format(distancia_cm), (x3+w3+distancia_pixeles//2, y3-30), 2, 0.8, (0,0,255), 1, cv2.LINE_AA)
                         cv2.line(dst,(x3+w3,y3-20),(x3, y3-20),(0, 0, 255),2)
                         cv2.line(dst,(x3+w3,y3-30),(x3+w3, y3-10),(0, 0, 255),2)
@@ -155,12 +176,23 @@ while True:
                         cv2.line(dst,(x4+w4,y4-30),(x4+w4, y4-10),(0, 0, 255),2)
                         cv2.line(dst,(x3,y4-30),(x3, y4-10),(0, 0, 255),2)
                         
-                if len(puntos1) > 6:
+                if len(puntos1) == 6:
                     x5, y5, w5, h5 = puntos1[4]
                     x6, y6, w6, h6 = puntos1[5]
                     if x5 < x6:
                         distancia_pixeles = abs(x6 - (x5+w5)) 
                         distancia_cm = (distancia_pixeles*29.7)/720
+#                         if distancia_cm < 2:
+#                 #         Audio distancia minima
+#                             GPIO.output(2,GPIO.LOW)
+#                             GPIO.output(3,GPIO.LOW)
+#                             GPIO.output(4,GPIO.HIGH)
+#                             pygame.mixer.init()
+#                             pygame.mixer.music.load("distancia.wav")
+#                             pygame.mixer.music.play()
+#                             while pygame.mixer.music.get_busy() == True:
+#                                     continue
+                            
                         cv2.putText(dst, "{:.2f} cm".format(distancia_cm), (x5+w5+distancia_pixeles//2, y5-30), 2, 0.8, (0,0,255), 1, cv2.LINE_AA)
                         cv2.line(dst,(x5+w5,y5-20),(x5, y5-20),(0, 0, 255),2)
                         cv2.line(dst,(x5+w5,y5-30),(x5+w5, y5-10),(0, 0, 255),2)
@@ -177,13 +209,13 @@ while True:
                 conteo += 1
                 cv2.putText(dst, str(conteo), (x-10,y+10), 1, 2,(255,0,0),2)
                 color = (0, 0, 255)   
-        texto_conteo = "Numero de personas =" + str(conteo - 1)                               
+        texto_conteo = "Numero de personas =" + str(conteo)                               
         texto_maximo = "Aviso! Maximo de personas"
-        maximo = conteo -1
+        maximo = conteo
 #         print('Numero de personas en el salon =',conteo-1)
         
 #         Control de personas en el area
-        if maximo <= 10:
+        if maximo <= 16:
             cv2.putText(dst, texto_conteo , (10, 30),
                     cv2.FONT_HERSHEY_SIMPLEX, 1, color1,2)             
             GPIO.output(2,GPIO.HIGH)
@@ -198,7 +230,7 @@ while True:
             a = 1
         cv2.imshow("rectangulos", dst)
 
-    #cv2.imshow("frame", frame)
+    cv2.imshow("frame", frame)
     if a == 1:
 #             Audio maximo personas
         pygame.mixer.init()
